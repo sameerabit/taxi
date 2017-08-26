@@ -36,22 +36,22 @@ export class HomePage {
     }
 
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-      this.startNavigating(lat,long,latLng);
+      let directionsService = new google.maps.DirectionsService;
+      let directionsDisplay = new google.maps.DirectionsRenderer;
+        directionsDisplay.setMap(this.map);
+        directionsDisplay.setPanel(this.directionsPanel.nativeElement);
+
+      this.startNavigating(lat,long,latLng,directionsService,directionsDisplay);
       this.map.addListener("click",(event)=>{
-          this.startNavigating(lat,long,event.latLng);
+          this.startNavigating(lat,long,event.latLng,directionsService,directionsDisplay);
       });
 
    }
 
 
-    startNavigating(lat,long,clickLatLong){
+    startNavigating(lat,long,clickLatLong,directionsService,directionsDisplay){
 
-        let directionsService = new google.maps.DirectionsService;
-        let directionsDisplay = new google.maps.DirectionsRenderer;
-
-
-        directionsDisplay.setMap(this.map);
-        directionsDisplay.setPanel(this.directionsPanel.nativeElement);
+           
         directionsService.route({
             origin: {lat: lat, lng: long},
             destination: clickLatLong, // 6.7092298,80.0768186
@@ -84,6 +84,4 @@ export class HomePage {
     ;
     })
   }
-
-
 }

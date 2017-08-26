@@ -71,16 +71,16 @@ var HomePage = (function () {
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-        this.startNavigating(lat, long, latLng);
-        this.map.addListener("click", function (event) {
-            _this.startNavigating(lat, long, event.latLng);
-        });
-    };
-    HomePage.prototype.startNavigating = function (lat, long, clickLatLong) {
         var directionsService = new google.maps.DirectionsService;
         var directionsDisplay = new google.maps.DirectionsRenderer;
         directionsDisplay.setMap(this.map);
         directionsDisplay.setPanel(this.directionsPanel.nativeElement);
+        this.startNavigating(lat, long, latLng, directionsService, directionsDisplay);
+        this.map.addListener("click", function (event) {
+            _this.startNavigating(lat, long, event.latLng, directionsService, directionsDisplay);
+        });
+    };
+    HomePage.prototype.startNavigating = function (lat, long, clickLatLong, directionsService, directionsDisplay) {
         directionsService.route({
             origin: { lat: lat, lng: long },
             destination: clickLatLong,
@@ -121,7 +121,7 @@ __decorate([
 ], HomePage.prototype, "directionsPanel", void 0);
 HomePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"/home/sameera/ionic/nearby-restaurants/src/pages/home/home.html"*/'<ion-header>\n<ion-navbar>\n    <ion-title>\n    Nearby Me Restaurants\n    </ion-title>\n    <ion-buttons end>\n    <button ion-button (click)="showNearbyResto()"><ion-icon name="list"></ion-icon>Restaurants</button>\n    </ion-buttons>  \n\n</ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n<div #map id="map"></div>\n    <ion-card>\n        <ion-card-content>\n            <div #directionsPanel></div>\n        </ion-card-content>\n    </ion-card>\n<!-- <div style="width : 100% ;height: 60%">\n    <ion-list>\n    <ion-item *ngFor="let place of places">\n        <p>{{place | json }}</p>\n    </ion-item>\n    </ion-list>\n</div>  -->\n\n</ion-content>\n'/*ion-inline-end:"/home/sameera/ionic/nearby-restaurants/src/pages/home/home.html"*/
+        selector: 'page-home',template:/*ion-inline-start:"/home/inocer/IonicProjects/taxi/src/pages/home/home.html"*/'<ion-header>\n<ion-navbar>\n    <ion-title>\n    Nearby Me Restaurants\n    </ion-title>\n    <ion-buttons end>\n    <button ion-button (click)="showNearbyResto()"><ion-icon name="list"></ion-icon>Restaurants</button>\n    </ion-buttons>  \n\n</ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n<div #map id="map"></div>\n    <ion-card>\n        <ion-card-content>\n            <div #directionsPanel></div>\n        </ion-card-content>\n    </ion-card>\n<!-- <div style="width : 100% ;height: 60%">\n    <ion-list>\n    <ion-item *ngFor="let place of places">\n        <p>{{place | json }}</p>\n    </ion-item>\n    </ion-list>\n</div>  -->\n\n</ion-content>\n'/*ion-inline-end:"/home/inocer/IonicProjects/taxi/src/pages/home/home.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__["a" /* Geolocation */]])
 ], HomePage);
@@ -241,7 +241,7 @@ var MyApp = (function () {
     return MyApp;
 }());
 MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/home/sameera/ionic/nearby-restaurants/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/home/sameera/ionic/nearby-restaurants/src/app/app.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/home/inocer/IonicProjects/taxi/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/home/inocer/IonicProjects/taxi/src/app/app.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]])
 ], MyApp);
