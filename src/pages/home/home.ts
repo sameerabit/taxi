@@ -8,80 +8,76 @@ declare var google;
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
 
-  options : GeolocationOptions;
-  currentPos : Geoposition;	
-  @ViewChild('map') mapElement: ElementRef;
+
+export class HomePage {
+  
   map: any;
+  origin: any;
+  destination:any;
+  currentPosition : Geoposition;	
+  locationOptions : GeolocationOptions;
   places : Array<any> ;
+
+  directionsService:any;
+  directionsDisplay:any;
+
+  @ViewChild('map') mapElement: ElementRef;
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
 
   constructor(public navCtrl: NavController,private geolocation : Geolocation) {
-
   }
 
   ionViewDidEnter(){
-    this.getUserPosition();
+      this.setUserLocation();
   }
 
-  addMap(lat,long){
-
-    let latLng = new google.maps.LatLng(lat, long);
-
-    let mapOptions = {
-    center: latLng,
-    zoom: 15,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+  setUserLocation(){
+    this.locationOptions = {
+        enableHighAccuracy : false
     }
-
-    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-      let directionsService = new google.maps.DirectionsService;
-      let directionsDisplay = new google.maps.DirectionsRenderer;
-        directionsDisplay.setMap(this.map);
-        directionsDisplay.setPanel(this.directionsPanel.nativeElement);
-
-      this.startNavigating(lat,long,latLng,directionsService,directionsDisplay);
-      this.map.addListener("click",(event)=>{
-          this.startNavigating(lat,long,event.latLng,directionsService,directionsDisplay);
-      });
-
-   }
-
-
-    startNavigating(lat,long,clickLatLong,directionsService,directionsDisplay){
-
-           
-        directionsService.route({
-            origin: {lat: lat, lng: long},
-            destination: clickLatLong, // 6.7092298,80.0768186
-            travelMode: google.maps.TravelMode['DRIVING']
-        }, (res, status) => {
-            directionsDisplay.setDirections(null);
-            if(status == google.maps.DirectionsStatus.OK){
-                directionsDisplay.setDirections(res);
-            } else {
-                console.warn(status);
-            }
-
-        });
-
-    }
-
-  getUserPosition(){
-    this.options = {
-    enableHighAccuracy : false
-    };
-    this.geolocation.getCurrentPosition(this.options).then((pos : Geoposition) => {
-
-        this.currentPos = pos;     
-
-        console.log(pos);
-        this.addMap(pos.coords.latitude,pos.coords.longitude);
-
+    this.geolocation.getCurrentPosition(this.locationOptions).then((pos : Geoposition) => {
+        this.currentPosition = pos;
+        this.origin = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+        this.initMap();
     },(err : PositionError)=>{
         console.log("error : " + err.message);
-    ;
     })
+
   }
+
+  initMap(){
+      this.directionsService = new google.maps.DirectionsService;
+      this.directionsDisplay = new google.maps.DirectionsRenderer;
+      let mapOptions =  {
+          center: this.origin,
+          zoom: 15,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+      this.map = new google.maps.Map(this.mapElement.nativeElement,mapOptions);
+      this.directionsDisplay.setMap(this.map);
+      this.directionsDisplay.setPanel(this.directionsPanel.nativeElement);
+      this.calculateAndDisplayRoute(this.origin,this.origin);
+      this.map.addListener("click",(event)=>{
+         this.destination = event.latLng;
+         this.calculateAndDisplayRoute(this.origin,event.latLng);
+      });
+      
+  }
+
+
+  calculateAndDisplayRoute(origin,destination){
+      this.directionsService.route({
+          origin: origin,
+          destination: destination,
+          travelMode: google.maps.TravelMode['DRIVING']
+      },(response, status) => {
+          if(status == google.maps.DirectionsStatus.OK){
+              this.directionsDisplay.setDirections(response);
+          } else {
+              console.warn(status);
+          }
+      });
+  }  
 }
