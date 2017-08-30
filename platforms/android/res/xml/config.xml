@@ -37,6 +37,8 @@
     <allow-navigation href="http://10.5.0.1:8100" />
     <allow-navigation href="http://192.168.8.102:8100" />
     <allow-navigation href="http://192.168.8.100:8100" />
+    <allow-navigation href="http://192.168.8.101:8100" />
+    <allow-navigation href="http://192.168.10.30:8100" />
     <allow-intent href="market:*" />
     <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
     <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />

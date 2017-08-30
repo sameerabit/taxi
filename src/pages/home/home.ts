@@ -1,6 +1,7 @@
 import { Component,ViewChild, ElementRef } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Geolocation ,GeolocationOptions ,Geoposition ,PositionError } from '@ionic-native/geolocation';
+import 'rxjs/add/operator/filter';
 
 declare var google;
 
@@ -28,34 +29,80 @@ export class HomePage {
   constructor(public navCtrl: NavController,private geolocation : Geolocation) {
   }
 
-  ionViewDidEnter(){
-      this.setUserLocation();
-  }
-
-  setUserLocation(){
-    this.locationOptions = {
-        enableHighAccuracy : false
-    }
-    this.geolocation.getCurrentPosition(this.locationOptions).then((pos : Geoposition) => {
-        this.currentPosition = pos;
-        this.origin = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
-        this.initMap();
-    },(err : PositionError)=>{
-        console.log("error : " + err.message);
-    })
-
-  }
-
-  initMap(){
+  ionViewDidEnter() {
       this.directionsService = new google.maps.DirectionsService;
       this.directionsDisplay = new google.maps.DirectionsRenderer;
-      let mapOptions =  {
-          center: this.origin,
-          zoom: 15,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
+      this.geolocation.getCurrentPosition(this.locationOptions).then((pos : Geoposition) => {
+          this.currentPosition = pos;
+          this.origin = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+          this.map = new google.maps.Map(this.mapElement.nativeElement,{
+              center: this.origin,
+              zoom: 50,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+          });
+          this.addMarker();
+          this.initMap();
+      },(err : PositionError)=>{
+          console.log("error : " + err.message);
+      });
 
-      this.map = new google.maps.Map(this.mapElement.nativeElement,mapOptions);
+
+
+      this.geolocation.watchPosition()
+          .filter((p) => p.coords !== undefined) //Filter Out Errors
+          .subscribe(position => {
+              this.currentPosition = position;
+              this.origin = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+              this.addMarker();
+          });
+      }
+
+      addMarker(){
+
+          let marker = new google.maps.Marker({
+              map: this.map,
+              animation: google.maps.Animation.DROP,
+          });
+
+          marker.setPosition(new google.maps.LatLng(
+              this.currentPosition.coords.latitude,
+              this.currentPosition.coords.longitude));
+
+          let content = "<h4>Information!</h4>";
+
+          this.addInfoWindow(marker, content);
+      }
+
+    addInfoWindow(marker, content){
+
+        let infoWindow = new google.maps.InfoWindow({
+            content: content
+        });
+
+        google.maps.event.addListener(marker, 'click', () => {
+            infoWindow.open(this.map, marker);
+        });
+
+    }
+     
+
+
+  // setUserLocation(){
+  //   this.locationOptions = {
+  //       enableHighAccuracy : false
+  //   }
+  //   this.geolocation.getCurrentPosition(this.locationOptions).then((pos : Geoposition) => {
+  //       this.currentPosition = pos;
+  //       this.origin = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+  //       this.initMap();
+	// //setTimeout(this.setUserLocation(),300);
+  //   },(err : PositionError)=>{
+  //       console.log("error : " + err.message);
+  //   })
+  //
+  // }
+
+  initMap(){
       this.directionsDisplay.setMap(this.map);
       this.directionsDisplay.setPanel(this.directionsPanel.nativeElement);
       this.calculateAndDisplayRoute(this.origin,this.origin);

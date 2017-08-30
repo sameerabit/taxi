@@ -42,6 +42,8 @@ webpackEmptyAsyncContext.id = 148;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__ = __webpack_require__(191);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_filter__ = __webpack_require__(262);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_filter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_filter__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -54,59 +56,92 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var HomePage = (function () {
     function HomePage(navCtrl, geolocation) {
         this.navCtrl = navCtrl;
         this.geolocation = geolocation;
     }
     HomePage.prototype.ionViewDidEnter = function () {
-        this.getUserPosition();
-    };
-    HomePage.prototype.addMap = function (lat, long) {
         var _this = this;
-        var latLng = new google.maps.LatLng(lat, long);
-        var mapOptions = {
-            center: latLng,
-            zoom: 15,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-        this.startNavigating(lat, long, latLng);
-        this.map.addListener("click", function (event) {
-            _this.startNavigating(lat, long, event.latLng);
+        this.directionsService = new google.maps.DirectionsService;
+        this.directionsDisplay = new google.maps.DirectionsRenderer;
+        this.geolocation.getCurrentPosition(this.locationOptions).then(function (pos) {
+            _this.currentPosition = pos;
+            _this.origin = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+            _this.map = new google.maps.Map(_this.mapElement.nativeElement, {
+                center: _this.origin,
+                zoom: 50,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+            _this.addMarker();
+            _this.initMap();
+        }, function (err) {
+            console.log("error : " + err.message);
+        });
+        this.geolocation.watchPosition()
+            .filter(function (p) { return p.coords !== undefined; }) //Filter Out Errors
+            .subscribe(function (position) {
+            _this.currentPosition = position;
+            _this.origin = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            _this.addMarker();
         });
     };
-    HomePage.prototype.startNavigating = function (lat, long, clickLatLong) {
-        var directionsService = new google.maps.DirectionsService;
-        var directionsDisplay = new google.maps.DirectionsRenderer;
-        directionsDisplay.setMap(this.map);
-        directionsDisplay.setPanel(this.directionsPanel.nativeElement);
-        directionsService.route({
-            origin: { lat: lat, lng: long },
-            destination: clickLatLong,
+    HomePage.prototype.addMarker = function () {
+        var marker = new google.maps.Marker({
+            map: this.map,
+            animation: google.maps.Animation.DROP,
+        });
+        marker.setPosition(new google.maps.LatLng(this.currentPosition.coords.latitude, this.currentPosition.coords.longitude));
+        var content = "<h4>Information!</h4>";
+        this.addInfoWindow(marker, content);
+    };
+    HomePage.prototype.addInfoWindow = function (marker, content) {
+        var _this = this;
+        var infoWindow = new google.maps.InfoWindow({
+            content: content
+        });
+        google.maps.event.addListener(marker, 'click', function () {
+            infoWindow.open(_this.map, marker);
+        });
+    };
+    // setUserLocation(){
+    //   this.locationOptions = {
+    //       enableHighAccuracy : false
+    //   }
+    //   this.geolocation.getCurrentPosition(this.locationOptions).then((pos : Geoposition) => {
+    //       this.currentPosition = pos;
+    //       this.origin = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+    //       this.initMap();
+    // //setTimeout(this.setUserLocation(),300);
+    //   },(err : PositionError)=>{
+    //       console.log("error : " + err.message);
+    //   })
+    //
+    // }
+    HomePage.prototype.initMap = function () {
+        var _this = this;
+        this.directionsDisplay.setMap(this.map);
+        this.directionsDisplay.setPanel(this.directionsPanel.nativeElement);
+        this.calculateAndDisplayRoute(this.origin, this.origin);
+        this.map.addListener("click", function (event) {
+            _this.destination = event.latLng;
+            _this.calculateAndDisplayRoute(_this.origin, event.latLng);
+        });
+    };
+    HomePage.prototype.calculateAndDisplayRoute = function (origin, destination) {
+        var _this = this;
+        this.directionsService.route({
+            origin: origin,
+            destination: destination,
             travelMode: google.maps.TravelMode['DRIVING']
-        }, function (res, status) {
-            directionsDisplay.setDirections(null);
+        }, function (response, status) {
             if (status == google.maps.DirectionsStatus.OK) {
-                directionsDisplay.setDirections(res);
+                _this.directionsDisplay.setDirections(response);
             }
             else {
                 console.warn(status);
             }
-        });
-    };
-    HomePage.prototype.getUserPosition = function () {
-        var _this = this;
-        this.options = {
-            enableHighAccuracy: false
-        };
-        this.geolocation.getCurrentPosition(this.options).then(function (pos) {
-            _this.currentPos = pos;
-            console.log(pos);
-            _this.addMap(pos.coords.latitude, pos.coords.longitude);
-        }, function (err) {
-            console.log("error : " + err.message);
-            ;
         });
     };
     return HomePage;
@@ -121,7 +156,7 @@ __decorate([
 ], HomePage.prototype, "directionsPanel", void 0);
 HomePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"/home/sameera/ionic/nearby-restaurants/src/pages/home/home.html"*/'<ion-header>\n<ion-navbar>\n    <ion-title>\n    Nearby Me Restaurants\n    </ion-title>\n    <ion-buttons end>\n    <button ion-button (click)="showNearbyResto()"><ion-icon name="list"></ion-icon>Restaurants</button>\n    </ion-buttons>  \n\n</ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n<div #map id="map"></div>\n    <ion-card>\n        <ion-card-content>\n            <div #directionsPanel></div>\n        </ion-card-content>\n    </ion-card>\n<!-- <div style="width : 100% ;height: 60%">\n    <ion-list>\n    <ion-item *ngFor="let place of places">\n        <p>{{place | json }}</p>\n    </ion-item>\n    </ion-list>\n</div>  -->\n\n</ion-content>\n'/*ion-inline-end:"/home/sameera/ionic/nearby-restaurants/src/pages/home/home.html"*/
+        selector: 'page-home',template:/*ion-inline-start:"/home/sameera/ionic/taxi/src/pages/home/home.html"*/'<ion-header>\n<ion-navbar>\n    <ion-title>\n    Nearby Me Restaurants\n    </ion-title>\n    <ion-buttons end>\n    <button ion-button (click)="showNearbyResto()"><ion-icon name="list"></ion-icon>Restaurants</button>\n    </ion-buttons>  \n\n</ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n<div #map id="map"></div>\n    <ion-card>\n        <ion-card-content>\n            <div #directionsPanel></div>\n        </ion-card-content>\n    </ion-card>\n<!-- <div style="width : 100% ;height: 60%">\n    <ion-list>\n    <ion-item *ngFor="let place of places">\n        <p>{{place | json }}</p>\n    </ion-item>\n    </ion-list>\n</div>  -->\n\n</ion-content>\n'/*ion-inline-end:"/home/sameera/ionic/taxi/src/pages/home/home.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__["a" /* Geolocation */]])
 ], HomePage);
@@ -241,7 +276,7 @@ var MyApp = (function () {
     return MyApp;
 }());
 MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/home/sameera/ionic/nearby-restaurants/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/home/sameera/ionic/nearby-restaurants/src/app/app.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/home/sameera/ionic/taxi/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/home/sameera/ionic/taxi/src/app/app.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]])
 ], MyApp);
