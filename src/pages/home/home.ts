@@ -27,6 +27,7 @@ export class HomePage {
   @ViewChild('directionsPanel') directionsPanel: ElementRef;
 
   constructor(public navCtrl: NavController,private geolocation : Geolocation) {
+
   }
 
   ionViewDidEnter() {
@@ -42,6 +43,7 @@ export class HomePage {
           });
           this.addMarker();
           this.initMap();
+
       },(err : PositionError)=>{
           console.log("error : " + err.message);
       });
@@ -55,6 +57,7 @@ export class HomePage {
               this.origin = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
               this.addMarker();
           });
+         
       }
 
       addMarker(){
@@ -110,6 +113,7 @@ export class HomePage {
          this.destination = event.latLng;
          this.calculateAndDisplayRoute(this.origin,event.latLng);
       });
+      
       
   }
 
