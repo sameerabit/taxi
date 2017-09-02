@@ -171,24 +171,19 @@ var HomePage = (function () {
 }());
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* ViewChild */])('map'),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]) === "function" && _a || Object)
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
 ], HomePage.prototype, "mapElement", void 0);
 __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* ViewChild */])('directionsPanel'),
-    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */]) === "function" && _b || Object)
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ElementRef */])
 ], HomePage.prototype, "directionsPanel", void 0);
 HomePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-<<<<<<< HEAD
-        selector: 'page-home',template:/*ion-inline-start:"/home/sameera/ionic/taxi/src/pages/home/home.html"*/'<ion-content>\n\n<div #map id="map"></div>\n    <ion-card>\n        <ion-card-content>\n            <div #directionsPanel></div>\n        </ion-card-content>\n    </ion-card>\n<!-- <div style="width : 100% ;height: 60%">\n    <ion-list>\n    <ion-item *ngFor="let place of places">\n        <p>{{place | json }}</p>\n    </ion-item>\n    </ion-list>\n</div>  -->\n\n</ion-content>\n'/*ion-inline-end:"/home/sameera/ionic/taxi/src/pages/home/home.html"*/
-=======
-        selector: 'page-home',template:/*ion-inline-start:"/home/inocer/IonicProjects/taxi/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Galle Taxi</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n<div #map id="map"></div>\n    <ion-card>\n        <ion-card-content>\n            <div #directionsPanel></div>\n        </ion-card-content>\n    </ion-card>\n<!-- <div style="width : 100% ;height: 60%">\n    <ion-list>\n    <ion-item *ngFor="let place of places">\n        <p>{{place | json }}</p>\n    </ion-item>\n    </ion-list>\n</div>  -->\n\n</ion-content>\n'/*ion-inline-end:"/home/inocer/IonicProjects/taxi/src/pages/home/home.html"*/
->>>>>>> 831799fd04e0f6de822819dd60342d3020ba3f7b
+        selector: 'page-home',template:/*ion-inline-start:"/home/sameera/ionic/taxi/src/pages/home/home.html"*/'<<<<<<< HEAD\n<ion-content>\n=======\n<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Galle Taxi</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n>>>>>>> 831799fd04e0f6de822819dd60342d3020ba3f7b\n\n<div #map id="map"></div>\n    <ion-card>\n        <ion-card-content>\n            <div #directionsPanel></div>\n        </ion-card-content>\n    </ion-card>\n<!-- <div style="width : 100% ;height: 60%">\n    <ion-list>\n    <ion-item *ngFor="let place of places">\n        <p>{{place | json }}</p>\n    </ion-item>\n    </ion-list>\n</div>  -->\n\n</ion-content>\n'/*ion-inline-end:"/home/sameera/ionic/taxi/src/pages/home/home.html"*/
     }),
-    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__["a" /* Geolocation */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__["a" /* Geolocation */]) === "function" && _d || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__["a" /* Geolocation */]])
 ], HomePage);
 
-var _a, _b, _c, _d;
 //# sourceMappingURL=home.js.map
 
 /***/ }),
@@ -325,7 +320,7 @@ __decorate([
     __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Nav */])
 ], MyApp.prototype, "nav", void 0);
 MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/home/inocer/IonicProjects/taxi/src/app/app.html"*/'<ion-menu [content]="content">\n\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Galle Taxi</ion-title>\n    </ion-toolbar>\n  </ion-header>\n\n  <ion-content>\n    <ion-list>\n      <button ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}\n      </button>\n    </ion-list>\n  </ion-content>\n\n</ion-menu>\n\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n'/*ion-inline-end:"/home/inocer/IonicProjects/taxi/src/app/app.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/home/sameera/ionic/taxi/src/app/app.html"*/'<ion-menu [content]="content">\n\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Galle Taxi</ion-title>\n    </ion-toolbar>\n  </ion-header>\n\n  <ion-content>\n    <ion-list>\n      <button ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}\n      </button>\n    </ion-list>\n  </ion-content>\n\n</ion-menu>\n\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>\n'/*ion-inline-end:"/home/sameera/ionic/taxi/src/app/app.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* MenuController */],
