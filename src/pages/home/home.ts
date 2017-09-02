@@ -12,11 +12,11 @@ declare var google;
 
 
 export class HomePage {
-  
+
   map: any;
   origin: any;
   destination:any;
-  currentPosition : Geoposition;	
+  currentPosition : Geoposition;
   locationOptions : GeolocationOptions;
   places : Array<any> ;
 
@@ -46,14 +46,21 @@ export class HomePage {
           console.log("error : " + err.message);
       });
 
+      this.locationOptions = {
+         enableHighAccuracy : true
+     }
 
-
-      this.geolocation.watchPosition()
+      this.geolocation.watchPosition(this.locationOptions)
           .filter((p) => p.coords !== undefined) //Filter Out Errors
           .subscribe(position => {
               this.currentPosition = position;
               this.origin = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+              this.places.push({
+              	location: this.origin,
+        		stopover: true
+              });
               this.addMarker();
+              this.drawPath();
           });
       }
 
@@ -84,7 +91,7 @@ export class HomePage {
         });
 
     }
-     
+
 
 
   // setUserLocation(){
@@ -110,7 +117,21 @@ export class HomePage {
          this.destination = event.latLng;
          this.calculateAndDisplayRoute(this.origin,event.latLng);
       });
-      
+
+  }
+
+  drawPath(){
+  	 this.directionsService.route({
+           waypoints: this.places,
+    	   optimizeWaypoints: true,
+    	   travelMode: 'DRIVING'
+      },(response, status) => {
+          if(status == google.maps.DirectionsStatus.OK){
+              this.directionsDisplay.setDirections(response);
+          } else {
+              console.warn(status);
+          }
+      });
   }
 
 
@@ -126,5 +147,5 @@ export class HomePage {
               console.warn(status);
           }
       });
-  }  
+  }
 }

@@ -79,12 +79,20 @@ var HomePage = (function () {
         }, function (err) {
             console.log("error : " + err.message);
         });
-        this.geolocation.watchPosition()
+        this.locationOptions = {
+            enableHighAccuracy: true
+        };
+        this.geolocation.watchPosition(this.locationOptions)
             .filter(function (p) { return p.coords !== undefined; }) //Filter Out Errors
             .subscribe(function (position) {
             _this.currentPosition = position;
             _this.origin = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            _this.places.push({
+                location: _this.origin,
+                stopover: true
+            });
             _this.addMarker();
+            _this.drawPath();
         });
     };
     HomePage.prototype.addMarker = function () {
@@ -129,6 +137,21 @@ var HomePage = (function () {
             _this.calculateAndDisplayRoute(_this.origin, event.latLng);
         });
     };
+    HomePage.prototype.drawPath = function () {
+        var _this = this;
+        this.directionsService.route({
+            waypoints: this.places,
+            optimizeWaypoints: true,
+            travelMode: 'DRIVING'
+        }, function (response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                _this.directionsDisplay.setDirections(response);
+            }
+            else {
+                console.warn(status);
+            }
+        });
+    };
     HomePage.prototype.calculateAndDisplayRoute = function (origin, destination) {
         var _this = this;
         this.directionsService.route({
@@ -156,7 +179,7 @@ __decorate([
 ], HomePage.prototype, "directionsPanel", void 0);
 HomePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"/home/sameera/ionic/taxi/src/pages/home/home.html"*/'<ion-header>\n<ion-navbar>\n    <ion-title>\n    Nearby Me Restaurants\n    </ion-title>\n    <ion-buttons end>\n    <button ion-button (click)="showNearbyResto()"><ion-icon name="list"></ion-icon>Restaurants</button>\n    </ion-buttons>  \n\n</ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n<div #map id="map"></div>\n    <ion-card>\n        <ion-card-content>\n            <div #directionsPanel></div>\n        </ion-card-content>\n    </ion-card>\n<!-- <div style="width : 100% ;height: 60%">\n    <ion-list>\n    <ion-item *ngFor="let place of places">\n        <p>{{place | json }}</p>\n    </ion-item>\n    </ion-list>\n</div>  -->\n\n</ion-content>\n'/*ion-inline-end:"/home/sameera/ionic/taxi/src/pages/home/home.html"*/
+        selector: 'page-home',template:/*ion-inline-start:"/home/sameera/ionic/taxi/src/pages/home/home.html"*/'<ion-content>\n\n<div #map id="map"></div>\n    <ion-card>\n        <ion-card-content>\n            <div #directionsPanel></div>\n        </ion-card-content>\n    </ion-card>\n<!-- <div style="width : 100% ;height: 60%">\n    <ion-list>\n    <ion-item *ngFor="let place of places">\n        <p>{{place | json }}</p>\n    </ion-item>\n    </ion-list>\n</div>  -->\n\n</ion-content>\n'/*ion-inline-end:"/home/sameera/ionic/taxi/src/pages/home/home.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__["a" /* Geolocation */]])
 ], HomePage);
