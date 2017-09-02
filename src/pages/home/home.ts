@@ -120,7 +120,6 @@ export class HomePage {
          this.destination = event.latLng;
          this.calculateAndDisplayRoute(this.origin,event.latLng);
       });
-<<<<<<< HEAD
 
   }
 
@@ -136,10 +135,8 @@ export class HomePage {
               console.warn(status);
           }
       });
-=======
+
       
-      
->>>>>>> 831799fd04e0f6de822819dd60342d3020ba3f7b
   }
 
 
