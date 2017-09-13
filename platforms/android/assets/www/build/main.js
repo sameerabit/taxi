@@ -61,6 +61,7 @@ var HomePage = (function () {
         this.navCtrl = navCtrl;
         this.googleMaps = googleMaps;
         this.geolocation = geolocation;
+        this.isMapReady = false;
     }
     // this will trigger as soon as the view is ready
     HomePage.prototype.ionViewDidLoad = function () {
@@ -69,12 +70,10 @@ var HomePage = (function () {
     HomePage.prototype.initMap = function () {
         var _this = this;
         this.mapElement = document.getElementById('map');
+        this.updateUserLocation();
         var mapOptions = {
             camera: {
-                target: {
-                    lat: 43.0741904,
-                    lng: -89.3809802
-                },
+                target: this.userLocation,
                 zoom: 18,
                 tilt: 30
             }
@@ -84,41 +83,53 @@ var HomePage = (function () {
         this.map.one(__WEBPACK_IMPORTED_MODULE_2__ionic_native_google_maps__["b" /* GoogleMapsEvent */].MAP_READY)
             .then(function () {
             console.log('Map is ready!');
-            // Now you can use all methods safely.
-            _this.map.addMarker({
-                title: 'Ionic',
-                icon: 'blue',
-                animation: 'DROP',
-                position: {
-                    lat: 43.0741904,
-                    lng: -89.3809802
-                }
-            })
-                .then(function (marker) {
-                marker.on(__WEBPACK_IMPORTED_MODULE_2__ionic_native_google_maps__["b" /* GoogleMapsEvent */].MARKER_CLICK)
-                    .subscribe(function () {
-                    alert('clicked');
-                });
-            });
+            _this.isMapReady = true;
         });
+    };
+    HomePage.prototype.showUserLocation = function () {
+        this.updateUserLocation();
+        this.addMarker(this.userLocation);
     };
     HomePage.prototype.updateUserLocation = function () {
-        console.log("AWAA");
-        this.geolocation.getCurrentPosition().then(function (resp) {
-            console.log("AWAAAAAAAAAAAA");
-            // resp.coords.latitude
-            // resp.coords.longitude
-        }).catch(function (error) {
-            console.log('Error getting location', error);
-        });
+        var _this = this;
+        if (navigator.geolocation) {
+            var options = {
+                enableHighAccuracy: true
+            };
+            navigator.geolocation.getCurrentPosition(function (position) {
+                console.info('using navigator');
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                console.info(latitude);
+                console.info(longitude);
+                _this.userLocation = {
+                    lat: latitude,
+                    lng: longitude
+                };
+            }, function (error) {
+                console.log(error);
+            }, options);
+        }
     };
-    HomePage.prototype.addMarker = function () {
+    HomePage.prototype.addMarker = function (location) {
+        this.map.addMarker({
+            title: 'Ionic',
+            icon: 'blue',
+            animation: 'DROP',
+            position: location
+        })
+            .then(function (marker) {
+            marker.on(__WEBPACK_IMPORTED_MODULE_2__ionic_native_google_maps__["b" /* GoogleMapsEvent */].MARKER_CLICK)
+                .subscribe(function () {
+                alert('clicked');
+            });
+        });
     };
     return HomePage;
 }());
 HomePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"/home/inocer/IonicProjects/location-tracker-gmap/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <div #map id="map"></div>\n  <ion-fab right bottom>\n    <button ion-fab color="light" (click)="updateUserLocation()"><ion-icon name="locate"></ion-icon></button>  \n  </ion-fab>\n</ion-content>\n'/*ion-inline-end:"/home/inocer/IonicProjects/location-tracker-gmap/src/pages/home/home.html"*/
+        selector: 'page-home',template:/*ion-inline-start:"/home/inocer/IonicProjects/taxi/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <div #map id="map"></div>\n  <ion-fab right bottom>\n    <button ion-fab color="light" (click)="showUserLocation()"><ion-icon name="locate"></ion-icon></button>  \n  </ion-fab>\n</ion-content>\n'/*ion-inline-end:"/home/inocer/IonicProjects/taxi/src/pages/home/home.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_2__ionic_native_google_maps__["a" /* GoogleMaps */],
@@ -175,7 +186,7 @@ var ListPage = ListPage_1 = (function () {
 }());
 ListPage = ListPage_1 = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-list',template:/*ion-inline-start:"/home/inocer/IonicProjects/location-tracker-gmap/src/pages/list/list.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>List</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <ion-list>\n    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">\n      <ion-icon [name]="item.icon" item-left></ion-icon>\n      {{item.title}}\n      <div class="item-note" item-right>\n        {{item.note}}\n      </div>\n    </button>\n  </ion-list>\n  <div *ngIf="selectedItem" padding>\n    You navigated here from <b>{{selectedItem.title}}</b>\n  </div>\n</ion-content>\n'/*ion-inline-end:"/home/inocer/IonicProjects/location-tracker-gmap/src/pages/list/list.html"*/
+        selector: 'page-list',template:/*ion-inline-start:"/home/inocer/IonicProjects/taxi/src/pages/list/list.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>List</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <ion-list>\n    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">\n      <ion-icon [name]="item.icon" item-left></ion-icon>\n      {{item.title}}\n      <div class="item-note" item-right>\n        {{item.note}}\n      </div>\n    </button>\n  </ion-list>\n  <div *ngIf="selectedItem" padding>\n    You navigated here from <b>{{selectedItem.title}}</b>\n  </div>\n</ion-content>\n'/*ion-inline-end:"/home/inocer/IonicProjects/taxi/src/pages/list/list.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavParams */]])
 ], ListPage);
@@ -326,7 +337,7 @@ __decorate([
     __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* Nav */])
 ], MyApp.prototype, "nav", void 0);
 MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/home/inocer/IonicProjects/location-tracker-gmap/src/app/app.html"*/'<ion-menu [content]="content">\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Menu</ion-title>\n    </ion-toolbar>\n  </ion-header>\n\n  <ion-content>\n    <ion-list>\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}\n      </button>\n    </ion-list>\n  </ion-content>\n\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>'/*ion-inline-end:"/home/inocer/IonicProjects/location-tracker-gmap/src/app/app.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/home/inocer/IonicProjects/taxi/src/app/app.html"*/'<ion-menu [content]="content">\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Menu</ion-title>\n    </ion-toolbar>\n  </ion-header>\n\n  <ion-content>\n    <ion-list>\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}\n      </button>\n    </ion-list>\n  </ion-content>\n\n</ion-menu>\n\n<!-- Disable swipe-to-go-back because it\'s poor UX to combine STGB with side menus -->\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>'/*ion-inline-end:"/home/inocer/IonicProjects/taxi/src/app/app.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */],

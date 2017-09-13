@@ -19,6 +19,8 @@ import { Geolocation } from '@ionic-native/geolocation';
 export class HomePage {
   map: GoogleMap;
   mapElement: HTMLElement;
+  isMapReady: Boolean = false;
+  userLocation :any;
 
   constructor(
     public navCtrl: NavController,
@@ -32,12 +34,10 @@ export class HomePage {
 
   initMap(){
     this.mapElement = document.getElementById('map');
+    this.updateUserLocation();
     let mapOptions: GoogleMapOptions = {
       camera: {
-        target: {
-          lat: 43.0741904,
-          lng: -89.3809802
-        },
+        target: this.userLocation,
         zoom: 18,
         tilt: 30
       }
@@ -49,39 +49,49 @@ export class HomePage {
     this.map.one(GoogleMapsEvent.MAP_READY)
       .then(() => {
         console.log('Map is ready!');
+        this.isMapReady = true;
+      });
+  }
 
-        // Now you can use all methods safely.
-        this.map.addMarker({
+  showUserLocation(){
+    this.updateUserLocation();
+    this.addMarker(this.userLocation);  
+  }
+  updateUserLocation(){    
+    if (navigator.geolocation) {
+      var options = {
+        enableHighAccuracy: true
+      };
+
+      navigator.geolocation.getCurrentPosition(position=> {
+        console.info('using navigator');
+        let latitude = position.coords.latitude; 
+        let longitude = position.coords.longitude
+        console.info(latitude);
+        console.info(longitude);
+        this.userLocation = {
+          lat: latitude,
+          lng: longitude
+        };
+      }, error => {
+        console.log(error);
+      }, options);
+    }
+  }
+
+  addMarker(location){
+    this.map.addMarker({
             title: 'Ionic',
             icon: 'blue',
             animation: 'DROP',
-            position: {
-              lat: 43.0741904,
-              lng: -89.3809802
-            }
+            position: location
           })
           .then(marker => {
             marker.on(GoogleMapsEvent.MARKER_CLICK)
               .subscribe(() => {
                 alert('clicked');
               });
-          });
-
-      });
-  }
-
-  updateUserLocation(){
-    this.geolocation.getCurrentPosition().then((resp) => {
-      console.log("inside the geolocation.getCurrentPosition()");
-      // resp.coords.latitude
-      // resp.coords.longitude
-    }).catch((error) => {
-      console.log('Error getting location', error);
     });
-  }
-
-  addMarker(){
-    
   }
 
 }

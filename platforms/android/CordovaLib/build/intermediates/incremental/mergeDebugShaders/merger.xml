@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/home/inocer/IonicProjects/location-tracker-gmap/platforms/android/CordovaLib/src/main/shaders"/></dataSet><dataSet config="debug"><source path="/home/inocer/IonicProjects/location-tracker-gmap/platforms/android/CordovaLib/src/debug/shaders"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/home/inocer/IonicProjects/taxi/platforms/android/CordovaLib/src/main/shaders"/></dataSet><dataSet config="debug"><source path="/home/inocer/IonicProjects/taxi/platforms/android/CordovaLib/src/debug/shaders"/></dataSet></merger>
