@@ -71,9 +71,8 @@ export class HomePage {
   }
 
   updateUserLocation(){
-    console.log("AWAA");
     this.geolocation.getCurrentPosition().then((resp) => {
-      console.log("AWAAAAAAAAAAAA");
+      console.log("inside the geolocation.getCurrentPosition()");
       // resp.coords.latitude
       // resp.coords.longitude
     }).catch((error) => {
