@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/home/sameera/.android/build-cache/c8c168844ef0e2a8e8c2e850de8709928f6e0bac/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="fcae52a60bc07924d370b4d376116cd8f8581f54">
+        <dex dex="/home/sameera/AndroidStudioProjects/Map1/app/build/intermediates/pre-dexed/debug/classes_43711377c36bcfec7601600416b7cf6d8bf9b0ad.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/sameera/.android/build-cache/8bd949078906debd0264d1542c3fa0f3745621ac/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="2430e711762a749feb00b3d64858ca4768251b9d">
+        <dex dex="/home/sameera/AndroidStudioProjects/Map1/app/build/intermediates/pre-dexed/debug/classes_3515a8d82e7d0a7387bd83a372b2358700ddbe89.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/sameera/.android/build-cache/ca1db98cf56c86f24133b52ae319e2442bf54f02/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="70ffe00aaf049893f59d1dad57bd82992faa38ef">
+        <dex dex="/home/sameera/AndroidStudioProjects/Map1/app/build/intermediates/pre-dexed/debug/classes_0ed418f22d3bd9e6ecb65d5e720f5633d116a3ee.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/sameera/.android/build-cache/7a5a91c934fbb99472af677cbef6b9cf5cdf4b29/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="364364bf77b4a71afc5930fc3ae57b3f0eea637c">
+        <dex dex="/home/sameera/AndroidStudioProjects/Map1/app/build/intermediates/pre-dexed/debug/classes_929bf7058dfdd2c517181bdb410899a208e21f3d.jar" />
+    </item>
+
+</items>
